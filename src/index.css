@@ -1,1 +1,194 @@
 @import "tailwindcss";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+@theme {
+  --color-bg: #0A1220;
+  --color-bg-raised: #0E1A2E;
+  --color-bg-sunken: #070D18;
+  --color-line: rgba(190, 215, 255, 0.14);
+  --color-line-strong: rgba(190, 215, 255, 0.32);
+  --color-ink: #E8F0FF;
+  --color-ink-dim: #9DB0CC;
+  --color-ink-faint: #5F7391;
+  --color-accent: #FFB020;
+  --color-accent-dim: rgba(255, 176, 32, 0.16);
+  --color-ok: #4ADE80;
+
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@custom-variant light (&:where(.light, .light *));
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-heading);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.light body,
+body.light {
+  --color-bg: #F4F1E8;
+  --color-bg-raised: #EBE7DC;
+  --color-bg-sunken: #DDD8CC;
+  --color-line: rgba(15, 27, 45, 0.12);
+  --color-line-strong: rgba(15, 27, 45, 0.28);
+  --color-ink: #0F1B2D;
+  --color-ink-dim: #2D3E56;
+  --color-ink-faint: #6B7B8F;
+  --color-accent: #C77700;
+  --color-accent-dim: rgba(199, 119, 0, 0.12);
+  --color-ok: #16A34A;
+}
+
+/* Blueprint grid background */
+.blueprint-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px),
+    linear-gradient(var(--color-line-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line-strong) 1px, transparent 1px);
+  background-size:
+    24px 24px,
+    24px 24px,
+    120px 120px,
+    120px 120px;
+  background-position: -1px -1px;
+  opacity: 0.6;
+}
+
+.blueprint-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.35) 100%);
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+}
+
+/* Font classes */
+.font-heading {
+  font-family: var(--font-heading);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Mono label utility */
+.mono-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-faint);
+}
+
+/* Corner ticks for cards */
+.corner-ticks {
+  position: relative;
+}
+.corner-ticks::before,
+.corner-ticks::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--color-line-strong);
+  border-style: solid;
+  transition: border-color 0.15s;
+}
+.corner-ticks::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+.corner-ticks::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+}
+.corner-ticks:hover::before,
+.corner-ticks:hover::after {
+  border-color: var(--color-accent);
+}
+
+/* Drawing animation */
+@keyframes draw-line {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  .blueprint-grid {
+    opacity: 0.3;
+  }
+}
